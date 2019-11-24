@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Geolocation Test</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+
+<body>
+  <div>
+    <a class="waves-effect waves-light btn">Draw Two Cards</a>
+    <span id="total">Total: 0</span>  
+  </div>
+  <div id="drawnCards"></div>
+  <div>
+
+  </div>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script type="text/javascript">
+    // Event listener for all button elements
+    var drawnCardsDiv = $("#drawnCards");
+    var total = $('#total');
+    var value = 0;
+
+    $("a").on("click", function () {
+
+      var count = "2";
+      var deck = "new";
+
+      var queryURL = `https://deckofcardsapi.com/api/deck/${deck}/draw/?count=${count}`
+
+      // Performing our AJAX GET request
+      $.ajax({
+        url: queryURL,
+        method: "GET",
+
+      })
+        // After the data comes back from the API
+        .then(function (response) {
+          console.log(response)
+          for (i = 0; i < response.cards.length; i++) {
+            var cardImg = $("<img>");
+            cardImg.attr("src", response.cards[i].image);
+            drawnCardsDiv.append(cardImg);
+            value += parseInt(response.cards[i].value);
+            total.text("Total: " + value);
+          }
+        });
+    });
+
+  </script>
+</body>
+
+</html>
